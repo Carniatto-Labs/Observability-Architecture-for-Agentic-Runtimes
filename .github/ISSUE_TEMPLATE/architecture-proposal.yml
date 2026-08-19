@@ -1,0 +1,37 @@
+name: Architecture proposal
+description: Propose a change to the observability architecture.
+title: "proposal: "
+labels: ["proposal"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you for contributing. Please explain the problem before proposing a solution.
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem or use case
+      description: What runtime behavior cannot be observed or modeled today?
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed architectural change
+      description: Describe the proposed span, event, metric, attribute, or requirement.
+    validations:
+      required: true
+  - type: textarea
+    id: applicability
+    attributes:
+      label: Cross-runtime applicability
+      description: Which frameworks, runtimes, or protocols does this apply to?
+    validations:
+      required: true
+  - type: textarea
+    id: telemetry
+    attributes:
+      label: Telemetry availability
+      description: Explain how this information can be captured at runtime without collecting sensitive content by default.
+    validations:
+      required: true

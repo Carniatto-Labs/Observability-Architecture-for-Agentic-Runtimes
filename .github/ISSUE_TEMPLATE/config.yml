@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Read the RFC
+    url: https://github.com/REPLACE_WITH_ORG/REPLACE_WITH_REPO/blob/main/RFC.md
+    about: Review the architectural proposal before opening an issue.
+  - name: Code of Conduct
+    url: https://github.com/REPLACE_WITH_ORG/REPLACE_WITH_REPO/blob/main/CODE_OF_CONDUCT.md
+    about: Community participation expectations.

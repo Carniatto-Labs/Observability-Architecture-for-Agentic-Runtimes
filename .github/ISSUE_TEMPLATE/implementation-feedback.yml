@@ -1,0 +1,26 @@
+name: Implementation feedback
+description: Share findings from applying the architecture in a real system.
+title: "feedback: "
+labels: ["implementation-feedback"]
+body:
+  - type: textarea
+    id: context
+    attributes:
+      label: Implementation context
+      description: Describe the runtime, framework, and observability backend.
+    validations:
+      required: true
+  - type: textarea
+    id: finding
+    attributes:
+      label: Finding
+      description: What worked, what was missing, or what was difficult to instrument?
+    validations:
+      required: true
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Evidence or example
+      description: Share sanitized traces, events, screenshots, or code snippets. Do not include secrets or personal data.
+    validations:
+      required: true
