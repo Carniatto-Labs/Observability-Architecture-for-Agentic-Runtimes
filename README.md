@@ -3,17 +3,16 @@
 > An OpenTelemetry-based architecture for observing durable agentic execution: Runs, state transitions, checkpoints, tool causality, external effects, compensation, and privacy-aware telemetry.
 
 **Status:** Architectural proposal  
+**Version:** 0.1.0  
 **Maintained by:** Carniatto Labs
 
-## Why this exists
+## Why This Exists
 
-Most agent observability focuses on model calls: latency, token usage, cost, and tool invocations.
+Most agent observability focuses on model calls: latency, token usage, cost, and tool invocations. That is necessary, but not sufficient for production agentic systems.
 
-That is necessary, but not sufficient for production agentic systems.
+Production agents execute durable workflows. They pause, resume from checkpoints, delegate work, call tools, change external systems, retry operations, and may need to compensate for partial failures.
 
-Real agents execute durable workflows. They pause, resume from checkpoints, delegate work, call tools, change external systems, retry operations, and may need to compensate for partial failure.
-
-This project proposes an observability architecture that treats the **Run** — the concrete execution of an agentic runtime — as the primary unit of observation.
+This project proposes an observability architecture that treats the **Run** -- the concrete execution of an agentic runtime -- as the primary unit of observation.
 
 ## The Core Idea
 
@@ -39,23 +38,16 @@ The goal is to make runtime behavior understandable end to end:
 - Was the Run resumed from a checkpoint?
 - What did it cost, and why did it fail?
 
-## What This Specification Covers
+## Documents
 
-- Run identity, lifecycle, and distributed correlation
-- Durable state transitions and checkpoint recovery
-- Agentic decision loops and operational rationale
-- Tool execution and MCP integration
-- External effects, idempotency, retries, and compensations
-- W3C Trace Context propagation and non-linear causal links
-- Metrics for latency, token usage, cost, retries, and recovery
-- Privacy-aware logging, redaction, and guardrails
-- OpenTelemetry Collector as the telemetry policy enforcement point
+- [RFC: Observability Architecture for Agentic Runtimes](RFC.md) -- the normative target architecture.
+- [Adoption Guide: Observability for Production Agents](ADOPTION_GUIDE.md) -- a non-normative implementation and operational adoption guide.
+- [Changelog](CHANGELOG.md) -- version history.
+- [Contributing Guide](CONTRIBUTING.md) -- how to provide feedback and propose changes.
 
 ## Design Position
 
-This is not a competing observability standard.
-
-It builds on OpenTelemetry and reuses existing GenAI conventions wherever they apply. It proposes runtime-specific extensions for concepts that are not yet fully standardized, including:
+This is not a competing observability standard. It builds on OpenTelemetry and reuses existing GenAI conventions whenever they apply. It introduces runtime-specific extensions for concepts that are not yet fully standardized:
 
 - `agent.runtime.*`
 - `agent.state.*`
@@ -65,38 +57,27 @@ It builds on OpenTelemetry and reuses existing GenAI conventions wherever they a
 
 These extensions are intended to be validated in real implementations and discussed with the OpenTelemetry GenAI community.
 
-## Read the Specification
-
-The complete proposal is available in:
-
-- [RFC: Observability Architecture for Agentic Runtimes](./RFC.md)
-
 ## Standards and References
-
-This proposal builds on:
 
 - [OpenTelemetry GenAI Semantic Conventions](https://github.com/open-telemetry/semantic-conventions-genai)
 - [OpenTelemetry Trace API](https://opentelemetry.io/docs/specs/otel/trace/api/)
 - [W3C Trace Context](https://www.w3.org/TR/trace-context/)
 - [OpenTelemetry Collector](https://opentelemetry.io/docs/collector/)
-- [OpenTelemetry guidance for sensitive data](https://opentelemetry.io/docs/security/handling-sensitive-data/)
+- [OpenTelemetry guidance for handling sensitive data](https://opentelemetry.io/docs/security/handling-sensitive-data/)
 - [Model Context Protocol](https://modelcontextprotocol.io/)
 - [LangGraph persistence](https://docs.langchain.com/oss/python/langgraph/persistence)
 - [Saga Patterns](https://docs.aws.amazon.com/prescriptive-guidance/latest/cloud-design-patterns/saga-patterns.html)
 
 ## Contributing
 
-Feedback is welcome from teams building:
+Feedback is welcome from teams building durable agent workflows, multi-agent systems, MCP servers and clients, agent platforms, OpenTelemetry instrumentation, and runtime orchestration systems.
 
-- durable agent workflows;
-- multi-agent systems;
-- MCP servers and clients;
-- agent platforms;
-- OpenTelemetry instrumentation;
-- runtime orchestration systems.
+Please open an issue to discuss use cases, terminology, implementation experience, or compatibility concerns before proposing major changes.
 
-Please open an issue to discuss use cases, terminology, implementation experience, or compatibility concerns before submitting major changes.
+## License
 
-## Status and Scope
+This project is licensed under the [Apache License 2.0](LICENSE).
 
-This repository contains an
+## About Carniatto Labs
+
+Carniatto Labs builds architecture, systems, and applied research for reliable AI and agentic software. We believe production-grade agents require more than capable models: they require observable, durable, secure, and governable runtimes.
