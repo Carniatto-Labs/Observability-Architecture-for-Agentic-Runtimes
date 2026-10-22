@@ -49,10 +49,10 @@ The goal is to make runtime behavior understandable end to end:
 
 ## Reproduction
 
-The evidence behind v0.2.0 lives in a **separate repository**, versioned on its own and pinned
+The evidence behind v0.3.0 lives in a **separate repository**, versioned on its own and pinned
 to this one by tag: the reference implementation runs a durable agent runtime (LangGraph +
 Postgres checkpoints), exports OpenTelemetry through a Collector to Tempo/Prometheus/Loki, and
-executes eleven scenarios from checkpoint restore to compensation. One command reproduces every
+executes twelve scenarios, from checkpoint restore to lost-acknowledgement reconciliation. One command reproduces every
 number quoted in this repository.
 
 Spec and reproduction are separate so that a red harness is never mistaken for a broken
