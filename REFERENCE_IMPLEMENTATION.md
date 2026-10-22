@@ -50,6 +50,10 @@ individual checks: 80 pass, 0 fail
 ALL SCENARIOS VALIDATED
 ```
 
+Last verified end to end: **2026-10-22**, `80 pass / 0 fail` on a local stack (colima, Docker,
+aarch64), with 14/14 vectors and 8/8 dashboard queries. A later run that fails is a real result,
+not a documentation bug.
+
 Individual scenarios can be run alone, each with its own target (`make abc-smoke`,
 `make outcome-dedup-smoke`, `make hitl-smoke`, `make saga-smoke`, `make effect-smoke`,
 `make fanout-smoke`, `make guardrail-smoke`, `make mcp-smoke`, `make vectors`,
