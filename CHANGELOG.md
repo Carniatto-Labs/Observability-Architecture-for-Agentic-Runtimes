@@ -2,6 +2,19 @@
 
 All notable changes to this project are documented in this file.
 
+## [0.4.1] - 2026-10-22
+
+### Added
+
+- `mappings/aea-effect-authority.v0.1.md` — a non-normative, requirement-by-requirement semantic
+  mapping to the Agent Effect Authority contract, pinned to a source commit with a `sha256` per
+  excerpt. Records where OAAR is `equivalent`, `overlaps`, `weaker` and `orthogonal`, including
+  the requirements OAAR does not cover.
+
+### Changed
+
+- Documentation only: no normative change, no attribute or vocabulary change, no harness change.
+
 ## [0.4.0] - 2026-10-22
 
 ### Added

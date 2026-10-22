@@ -1,7 +1,7 @@
 # RFC: Observability Architecture for Agentic Runtimes
 
 **Status:** Architectural Proposal  
-**Version:** 0.4.0  
+**Version:** 0.4.1  
 **Last updated:** 2026-10-22  
 **Scope:** Agent execution runtimes, their durable workflows, tools, external effects, and distributed integrations.
 
@@ -236,7 +236,9 @@ Reconciliation against an authoritative source is outside the instrumented span;
 records that it has not happened yet.
 
 Portable conformance vectors for this section — inputs, evaluation order and expected
-`(status, reason)` pairs — are published in [`vectors/`](vectors/README.md). They are the
+`(status, reason)` pairs — are published in [`vectors/`](vectors/README.md), and the relation to
+the Agent Effect Authority contract is mapped requirement by requirement in
+[`mappings/`](mappings/aea-effect-authority.v0.1.md). They are the
 interface: a runtime conforms by reaching the same pairs without importing anything from this
 project.
 
@@ -338,6 +340,7 @@ These extensions SHOULD be evaluated for upstream standardization after they hav
 - [Saga Patterns](https://docs.aws.amazon.com/prescriptive-guidance/latest/cloud-design-patterns/saga-patterns.html)
 - [OAAR reference implementation](REFERENCE_IMPLEMENTATION.md)
 - [Effect-evidence conformance vectors](vectors/README.md)
+- [Semantic mapping: OAAR §9.1 ↔ Agent Effect Authority](mappings/aea-effect-authority.v0.1.md)
 
 ## 16. Reference implementation and validation status
 

@@ -45,12 +45,13 @@ The goal is to make runtime behavior understandable end to end:
 - [Adoption Guide: Observability for Production Agents](ADOPTION_GUIDE.md) -- a non-normative implementation and operational adoption guide.
 - [Reference Implementation Contract](REFERENCE_IMPLEMENTATION.md) -- how this spec is pinned to its reproduction, what the pin proves, and what it does not.
 - [Effect-Evidence Conformance Vectors](vectors/README.md) -- thirteen portable cases for §9.1; the JSON is the interface, no code import required.
+- [Semantic Mapping: AEA](mappings/aea-effect-authority.v0.1.md) -- requirement-by-requirement comparison with the Agent Effect Authority contract, including what this spec does not cover.
 - [Changelog](CHANGELOG.md) -- version history.
 - [Contributing Guide](Contributing.md) -- how to provide feedback and propose changes.
 
 ## Reproduction
 
-The evidence behind v0.4.0 lives in a **separate repository**, versioned on its own and pinned
+The evidence behind v0.4.1 lives in a **separate repository**, versioned on its own and pinned
 to this one by tag: the reference implementation runs a durable agent runtime (LangGraph +
 Postgres checkpoints), exports OpenTelemetry through a Collector to Tempo/Prometheus/Loki, and
 executes thirteen scenarios, from checkpoint restore to lost-acknowledgement reconciliation, and
