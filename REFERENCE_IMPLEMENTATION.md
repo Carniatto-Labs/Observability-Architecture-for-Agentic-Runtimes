@@ -1,7 +1,7 @@
 # Reference Implementation Contract
 
-**Spec version:** 0.3.0  
-**Implementation:** OAAR reference implementation — **separate repository** at tag `v0.3.0`  
+**Spec version:** 0.4.0  
+**Implementation:** OAAR reference implementation — **separate repository** at tag `v0.4.0`  
 **Location:** https://github.com/Carniatto-Labs/oaar-reference-impl
 
 This file is the only coupling between the specification and its reproduction. They are
@@ -24,8 +24,8 @@ What keeps them together is this file plus a version pin in both directions.
 
 | Side | Pins |
 |---|---|
-| This repo | implementation tag `v0.3.0` |
-| Implementation repo | spec version `0.3.0`, recorded in `spec.json` and printed by `make validate` |
+| This repo | implementation tag `v0.4.0` |
+| Implementation repo | spec version `0.4.0`, recorded in `spec.json` and printed by `make validate` |
 
 A change to either side that alters attribute names, vocabularies, or required fields is a
 **spec change first**, then a harness change, then a pin bump on both sides. A change that
@@ -38,7 +38,7 @@ want the interactive assistant. The validation harness itself does not need a mo
 
 ```bash
 git clone https://github.com/Carniatto-Labs/oaar-reference-impl && cd oaar-reference-impl
-git checkout v0.3.0
+git checkout v0.4.0
 make up          # pinned stack: app, product-api, payment-api, postgres, collector, tempo, prometheus, loki, grafana
 make validate    # runs every demo + verify pair, prints the RFC section -> evidence matrix
 ```
@@ -46,17 +46,18 @@ make validate    # runs every demo + verify pair, prints the RFC section -> evid
 Expected last lines:
 
 ```
-individual checks: 66 pass, 0 fail
+individual checks: 80 pass, 0 fail
 ALL SCENARIOS VALIDATED
 ```
 
 Individual scenarios can be run alone, each with its own target (`make abc-smoke`,
 `make outcome-dedup-smoke`, `make hitl-smoke`, `make saga-smoke`, `make effect-smoke`,
-`make fanout-smoke`, `make guardrail-smoke`, `make mcp-smoke`, `make dash-smoke`).
+`make fanout-smoke`, `make guardrail-smoke`, `make mcp-smoke`, `make vectors`,
+`make dash-smoke`).
 
 ## What the pin covers
 
-Per RFC §16, at tag `v0.3.0` the harness exercises §4–§8, §9 and §9.1 (effect evidence, including
+Per RFC §16, at tag `v0.4.0` the harness exercises §4–§8, §9 and §9.1 (effect evidence, including
 lost acknowledgement, stale / missing / unauthorized readback), §9.2 (verified and unverified
 compensation), §10 (typed links), §11 and §11.2, §12, and §13. The full section-by-section
 matrix with the evidence behind each row is in the implementation's README.
@@ -69,6 +70,7 @@ The rows that matter for the denominators:
 | `pending` at the reporting cut is not a failure | `make abc-unknown-smoke` |
 | One business outcome per operation, retries suppressed, conflicts flagged | `make outcome-dedup-smoke` — 3 operations / 4 runs / 6 observations → +3 |
 | A lost acknowledgement leaves the effect `unresolved`; only a fresh, registry-corroborated readback from an authorized source resolves it | `make effect-smoke` — confirmed / contradicted / stale / missing / estimated, 1 confirmed, 1 unconfirmed, 3 unresolved |
+| The §9.1 decision is reproducible without this project's code | `make vectors` — 13/13 cases of `oaar.effect-evidence` v0.1.0, digest-pinned to this spec |
 | `waiting` and `cancelled` are not failures | `make hitl-smoke`, `make guardrail-smoke` |
 | Unique ids never become metric labels | enforced at emit time and asserted against the Prometheus series dump |
 
@@ -91,7 +93,8 @@ Stated here so the pin is not read as broader than it is:
 
 ## Citing the pair
 
-> OAAR v0.3.0, validated by the OAAR reference implementation at tag `v0.3.0` (66/66 checks,
-> 12 scenarios, LangGraph + Postgres checkpoints + OpenTelemetry → Tempo/Prometheus/Loki).
+> OAAR v0.4.0, validated by the OAAR reference implementation at tag `v0.4.0` (80/80 checks,
+> 13 scenarios, including 13/13 portable effect-evidence vectors; LangGraph + Postgres
+> checkpoints + OpenTelemetry → Tempo/Prometheus/Loki).
 
 Citing one version without the other is not a conformance claim.

@@ -44,16 +44,17 @@ The goal is to make runtime behavior understandable end to end:
 - [RFC: Observability Architecture for Agentic Runtimes](RFC.md) -- the normative target architecture.
 - [Adoption Guide: Observability for Production Agents](ADOPTION_GUIDE.md) -- a non-normative implementation and operational adoption guide.
 - [Reference Implementation Contract](REFERENCE_IMPLEMENTATION.md) -- how this spec is pinned to its reproduction, what the pin proves, and what it does not.
+- [Effect-Evidence Conformance Vectors](vectors/README.md) -- thirteen portable cases for §9.1; the JSON is the interface, no code import required.
 - [Changelog](CHANGELOG.md) -- version history.
 - [Contributing Guide](Contributing.md) -- how to provide feedback and propose changes.
 
 ## Reproduction
 
-The evidence behind v0.3.0 lives in a **separate repository**, versioned on its own and pinned
+The evidence behind v0.4.0 lives in a **separate repository**, versioned on its own and pinned
 to this one by tag: the reference implementation runs a durable agent runtime (LangGraph +
 Postgres checkpoints), exports OpenTelemetry through a Collector to Tempo/Prometheus/Loki, and
-executes twelve scenarios, from checkpoint restore to lost-acknowledgement reconciliation. One command reproduces every
-number quoted in this repository.
+executes thirteen scenarios, from checkpoint restore to lost-acknowledgement reconciliation, and
+runs the portable vectors in this repository. One command reproduces every number quoted here.
 
 Spec and reproduction are separate so that a red harness is never mistaken for a broken
 standard, and a spec edit never silently invalidates a published measurement. The contract
