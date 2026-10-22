@@ -3,7 +3,7 @@
 > An OpenTelemetry-based architecture for observing durable agentic execution: Runs, state transitions, checkpoints, tool causality, external effects, compensation, and privacy-aware telemetry.
 
 **Status:** Architectural proposal  
-**Version:** 0.1.0  
+**Version:** 0.2.0  
 **Maintained by:** Carniatto Labs
 
 ## Why This Exists
@@ -12,20 +12,21 @@ Most agent observability focuses on model calls: latency, token usage, cost, and
 
 Production agents execute durable workflows. They pause, resume from checkpoints, delegate work, call tools, change external systems, retry operations, and may need to compensate for partial failures.
 
-This project proposes an observability architecture that treats the **Run** -- the concrete execution of an agentic runtime -- as the primary unit of observation.
+This project proposes an observability architecture that treats the **Run** -- the concrete execution of an agentic runtime -- as the primary unit of observation, and the **Logical Operation** as the unit at which outcomes are counted.
 
 ## The Core Idea
 
 ```text
 Thread or Session
-  -> Run
-     -> Workflow
-        -> Decision
-        -> State Transition
-        -> Tool Call
-        -> External Effect
-        -> Checkpoint / Resume
-        -> Compensation
+  -> Logical Operation
+     -> Run
+        -> Workflow
+           -> Decision
+           -> State Transition
+           -> Tool Call
+           -> External Effect
+           -> Checkpoint / Resume
+           -> Compensation
 ```
 
 The goal is to make runtime behavior understandable end to end:
@@ -42,17 +43,34 @@ The goal is to make runtime behavior understandable end to end:
 
 - [RFC: Observability Architecture for Agentic Runtimes](RFC.md) -- the normative target architecture.
 - [Adoption Guide: Observability for Production Agents](ADOPTION_GUIDE.md) -- a non-normative implementation and operational adoption guide.
+- [Reference Implementation Contract](REFERENCE_IMPLEMENTATION.md) -- how this spec is pinned to its reproduction, what the pin proves, and what it does not.
 - [Changelog](CHANGELOG.md) -- version history.
-- [Contributing Guide](CONTRIBUTING.md) -- how to provide feedback and propose changes.
+- [Contributing Guide](Contributing.md) -- how to provide feedback and propose changes.
+
+## Reproduction
+
+The evidence behind v0.2.0 lives in a **separate repository**, versioned on its own and pinned
+to this one by tag: the reference implementation runs a durable agent runtime (LangGraph +
+Postgres checkpoints), exports OpenTelemetry through a Collector to Tempo/Prometheus/Loki, and
+executes eleven scenarios from checkpoint restore to compensation. One command reproduces every
+number quoted in this repository.
+
+Spec and reproduction are separate so that a red harness is never mistaken for a broken
+standard, and a spec edit never silently invalidates a published measurement. The contract
+between them is [REFERENCE_IMPLEMENTATION.md](REFERENCE_IMPLEMENTATION.md); no file in this
+repository imports code from the other.
 
 ## Design Position
 
 This is not a competing observability standard. It builds on OpenTelemetry and reuses existing GenAI conventions whenever they apply. It introduces runtime-specific extensions for concepts that are not yet fully standardized:
 
 - `agent.runtime.*`
+- `agent.operation.*`
 - `agent.state.*`
 - `agent.decision.*`
 - `agent.effect.*`
+- `agent.artifact.*`
+- `agent.outcome.*`
 - `agent.tool.*`
 
 These extensions are intended to be validated in real implementations and discussed with the OpenTelemetry GenAI community.
