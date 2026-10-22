@@ -1,9 +1,13 @@
 # RFC: Observability Architecture for Agentic Runtimes
 
 **Status:** Architectural Proposal  
-**Version:** 0.3.0  
+**Version:** 0.4.0  
 **Last updated:** 2026-10-22  
 **Scope:** Agent execution runtimes, their durable workflows, tools, external effects, and distributed integrations.
+
+**Changes in 0.4.0**: portable conformance vectors for §9.1 (`vectors/`, suite
+`oaar.effect-evidence` v0.1.0) so the rule can be tested by a runtime that imports nothing from
+this project.
 
 **Changes in 0.3.0** (evidence: reference implementation at `v0.3.0`, see §16): the effect
 evidence rule behind §9.1 becomes testable — what a readback must be bound to, and why it
@@ -231,6 +235,11 @@ status and MUST NOT be reported as a success or a failure.
 Reconciliation against an authoritative source is outside the instrumented span; the span
 records that it has not happened yet.
 
+Portable conformance vectors for this section — inputs, evaluation order and expected
+`(status, reason)` pairs — are published in [`vectors/`](vectors/README.md). They are the
+interface: a runtime conforms by reaching the same pairs without importing anything from this
+project.
+
 ### 9.2 Compensation
 
 When a defined inverse action exists, the runtime MUST create an `agent.compensate` span. Compensation MUST be linked to the original effect through a span link and `agent.effect.id`.
@@ -328,6 +337,7 @@ These extensions SHOULD be evaluated for upstream standardization after they hav
 - [LangGraph Persistence](https://docs.langchain.com/oss/python/langgraph/persistence)
 - [Saga Patterns](https://docs.aws.amazon.com/prescriptive-guidance/latest/cloud-design-patterns/saga-patterns.html)
 - [OAAR reference implementation](REFERENCE_IMPLEMENTATION.md)
+- [Effect-evidence conformance vectors](vectors/README.md)
 
 ## 16. Reference implementation and validation status
 
@@ -346,7 +356,7 @@ Conformance status of this version:
 | §7 | Decision spans, closed kind vocabulary, sanitized basis | Exercised |
 | §8 | Tool semantics, W3C propagation, idempotent retry with dedup | Exercised |
 | §9 | Effect span, logical effect id, intent/attempt/evidence separation | Exercised |
-| §9.1 | `unresolved` effect evidence: lost ACK, stale / missing / unauthorized readback | Exercised (simulated authoritative source) |
+| §9.1 | `unresolved` effect evidence: lost ACK, stale / missing / unauthorized readback | Exercised in traces and by the portable vector suite (13 cases) |
 | §9.2 | Compensation requested vs verified | Exercised (verified and unverified paths) |
 | §10 | Typed links; link is not content-derivation evidence | Exercised (typed links), guidance only for the semantic limit |
 | §11 | Run-level and operation-level denominators, no unique-id dimensions | Exercised |

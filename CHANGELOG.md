@@ -2,6 +2,22 @@
 
 All notable changes to this project are documented in this file.
 
+## [0.4.0] - 2026-10-22
+
+### Added
+
+- `vectors/` — portable conformance vectors for §9.1 (`oaar.effect-evidence` v0.1.0), thirteen
+  cases with a documented evaluation order, covering every resolution reason including digest
+  mismatch, a readback bound to another attempt or effect, retracted evidence, an untrusted
+  verifier, a pre-dispatch observation and unknown verdict vocabulary.
+- The vectors are the interface: a runtime conforms by reaching the same `(status, reason)`
+  pairs without importing project code.
+
+### Changed
+
+- §9.1 and §16 point at the vectors; §9.1 conformance is stated at both levels (traces and
+  semantics).
+
 ## [0.3.0] - 2026-10-22
 
 ### Added
