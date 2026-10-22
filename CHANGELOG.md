@@ -2,6 +2,27 @@
 
 All notable changes to this project are documented in this file.
 
+## [0.3.0] - 2026-10-22
+
+### Added
+
+- §9.1 now states what a readback must satisfy to resolve an effect: bound to the logical
+  effect and the attempt, corroborated by the trusted evidence registry (exact id and digest),
+  from a source the policy authorizes for that domain and observation kind, post-attempt and
+  fresh.
+- `agent.effect.observe` span for the observation itself, so a readback can exist without
+  resolving anything.
+- `agent.effect.attempt.id`, `agent.effect.attempt.index`,
+  `agent.effect.dispatch.ack`, `agent.effect.resolution.reason`, and the evidence attribute set.
+- `agent.compensation.state` (`requested` / `unverified` / `verified`); `outcome` is only
+  present when the compensation is verified.
+- Contradicted effects resolve as `unconfirmed` and are counted as such.
+
+### Changed
+
+- Effect spans start `unresolved` regardless of transport acknowledgement.
+- Conformance table: §9, §9.1 and §9.2 are now exercised by the reference implementation.
+
 ## [0.2.0] - 2026-10-22
 
 ### Added

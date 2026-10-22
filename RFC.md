@@ -1,13 +1,17 @@
 # RFC: Observability Architecture for Agentic Runtimes
 
 **Status:** Architectural Proposal  
-**Version:** 0.2.0  
+**Version:** 0.3.0  
 **Last updated:** 2026-10-22  
 **Scope:** Agent execution runtimes, their durable workflows, tools, external effects, and distributed integrations.
 
-**Changes in 0.2.0** (evidence: reference implementation at `v0.2.0`, see §16): logical operation
-identity, the three levels of outcome, exactly-once business outcome accounting, effect
-intent/attempt/evidence separation, and a corrected end-user attribute.
+**Changes in 0.3.0** (evidence: reference implementation at `v0.3.0`, see §16): the effect
+evidence rule behind §9.1 becomes testable — what a readback must be bound to, and why it
+stays `unresolved` — and the conformance table marks §9 exercised.
+
+**Changes in 0.2.0**: logical operation identity, the three levels of outcome, exactly-once
+business outcome accounting, effect intent/attempt/evidence separation, and a corrected
+end-user attribute.
 
 ## 1. Purpose
 
@@ -199,14 +203,33 @@ The effect MUST record a safe resource identifier, mutation type, idempotency ke
 ### 9.1 Intent, attempt, and evidence are separate
 
 - `agent.effect.id` identifies the **logical effect** and MUST survive retries, replays, and resumptions.
-- `agent.effect.attempt.id` identifies one dispatch of that effect.
+- `agent.effect.attempt.id` identifies one dispatch of that effect; `agent.effect.attempt.index` orders them.
 - `agent.effect.confirmation.status` is the **evidence** state: `confirmed`, `unconfirmed`, or `unresolved`.
 
 A transport acknowledgement, a successful span, or a returned tool result is evidence of
-dispatch, not of effect. When the only authoritative observation of the effect lives outside
-the instrumented boundary, the status MUST remain `unresolved` rather than being promoted to
-`confirmed` or demoted to failure. Reconciliation against an authoritative source is outside
-the instrumented span; the span records that it has not happened yet.
+dispatch, not of effect. An effect span therefore starts `unresolved`, whatever the transport
+said.
+
+A readback is its own observation, on an `agent.effect.observe` span, carrying
+`agent.effect.evidence.id`, `.digest`, `.source`, `.kind`, `.verdict`, `.age.ms` and `.fresh`,
+bound to the effect and the attempt it observes. Such an observation resolves the effect only
+when all of the following hold:
+
+1. it is bound to this logical effect and this attempt;
+2. the trusted evidence registry corroborates the exact evidence id and digest — a self-declared
+   source name is not evidence;
+3. the policy authorizes that source for this effect domain and observation kind, so a model
+   estimate or a cached value cannot resolve a durable or physical effect;
+4. it was observed after the attempt; and
+5. it is fresh.
+
+Otherwise the status MUST remain `unresolved`, with the reason on
+`agent.effect.resolution.reason`. An observation that contradicts the intended effect resolves
+it as `unconfirmed`; that is knowledge, not failure. An unresolved effect MUST be counted by
+status and MUST NOT be reported as a success or a failure.
+
+Reconciliation against an authoritative source is outside the instrumented span; the span
+records that it has not happened yet.
 
 ### 9.2 Compensation
 
@@ -322,15 +345,17 @@ Conformance status of this version:
 | §6.1 | Artifact outcome, vocabulary disjoint from business | Exercised |
 | §7 | Decision spans, closed kind vocabulary, sanitized basis | Exercised |
 | §8 | Tool semantics, W3C propagation, idempotent retry with dedup | Exercised |
-| §9 | Effect span, logical effect id, intent/attempt/evidence separation | Partially exercised |
-| §9.1 | `unresolved` effect evidence and authoritative reconciliation | **Not exercised** |
-| §9.2 | Compensation requested vs verified | Exercised (verified path only) |
+| §9 | Effect span, logical effect id, intent/attempt/evidence separation | Exercised |
+| §9.1 | `unresolved` effect evidence: lost ACK, stale / missing / unauthorized readback | Exercised (simulated authoritative source) |
+| §9.2 | Compensation requested vs verified | Exercised (verified and unverified paths) |
 | §10 | Typed links; link is not content-derivation evidence | Exercised (typed links), guidance only for the semantic limit |
 | §11 | Run-level and operation-level denominators, no unique-id dimensions | Exercised |
 | §11.2 | Exactly-once business outcome accounting | Exercised |
 | §12 | Correlated logs, opt-in content, guardrail span | Exercised |
 | §13 | Collector as enforcement point | Exercised |
 
-The gaps in §9.1 are the next scenarios to build, not a claim of coverage. They are also the
-part of this proposal that upstream work on external-effect evidence is currently arguing
-about, so leaving them labelled is preferable to overstating conformance.
+Every requirement in this version is exercised by the pinned implementation. What the
+implementation cannot prove is that a *particular* external system is trustworthy: its
+authoritative source is in-process, so the claim is about the semantics surviving lost
+acknowledgements, stale and missing readbacks, unauthorized sources and unverified compensation
+— not about any real device or ledger.
